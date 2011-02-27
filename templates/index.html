@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Ping Pong{% endblock %}
+
+{% block main_content %}
+
+<div class="history">
+	<div class="history_title">Overall History:</div>
+	<table>
+	{% for match in matches %}
+		<tr>
+			<td>{{ match.winner.username }}</td>
+			<td><span class="beat">beat</span></td>
+			<td>{{ match.loser.username }}</td>
+			<td>{% if match.results %}({{ match.results }}){% endif %}</td>
+			<td>on {{ match.timestamp }}</td>
+		</tr>
+	{% empty %}
+		<tr><td>Nothing yet.</td></tr>
+	{% endfor %}
+	</table>
+</div>
+
+<div class="records">
+	<div class="records_title">Overall Records:</div>
+	{% for record in records %}
+	<div>
+		<a href="user/{{ record.name }}/">{{ record.name }}</a>:
+		{{ record.wins }} - {{ record.losses }}
+		({{ record.percentage }})
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

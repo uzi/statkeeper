@@ -1,0 +1,63 @@
+body
+{
+  background-color:white;
+  text:black;
+  font-family:"Helvetica Neue",helvetica,arial,sans-serif;
+}
+
+a, a:visited, a:hover, a:active
+{
+  color:blue;
+  text-decoration:none;
+}
+
+img
+{
+  border:0;
+}
+
+.barrier:after
+{
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/* base.html */
+#header_left
+{
+  float:left;
+  font-size:32px;
+  font-weight:bold;
+  padding:10px 10px 10px 10px;
+}
+
+#header_right
+{
+  float:right;
+  padding:10px 10px 10px 10px;
+}
+
+.history
+{
+  float:left;
+  padding:0px 10px 10px 10px;
+}
+
+.records
+{
+  float:right;
+  padding:0px 30px 10px 10px;
+}
+
+.beat
+{
+  color:green;
+}
+
+.lost
+{
+  color:red;
+}

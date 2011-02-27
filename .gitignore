@@ -1,0 +1,5 @@
+*.pyc
+*.swp
+localsettings.py
+statkeeper.db
+match/fixtures/
