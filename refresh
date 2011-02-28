@@ -7,4 +7,4 @@ find . -name '*.py[co]' -exec rm -v {} \;
 
 # Rebuild the database
 rm -f $DATABASE
-./manage.py syncdb --noinput
+./manage.py syncdb
