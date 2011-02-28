@@ -5,3 +5,8 @@ can support more than the one sport (if, god willing we get a foosball
 table as well).
 
 This was meant to be quick and dirty... it should show.
+
+To get it going, just make sure Django is in your python path, run the
+"refresh" script to set things up and "./manage.py runserver" to run
+the local server.  Run the "refresh" script again whenever you want to
+clear things out and start over.
