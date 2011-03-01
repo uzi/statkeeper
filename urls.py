@@ -22,14 +22,9 @@ urlpatterns += patterns('',
 
     #(r'^$', direct_to_template, { 'template': 'index.html' })
 
-    (r'^login/$', 'django.contrib.auth.views.login', {
-      'template_name': 'login.html'
-    }),
-    (r'^logout/$', 'django.contrib.auth.views.logout', {
-      'next_page': '/'
-    }),
+    (r'^login/$', 'django.contrib.auth.views.login'),
+    (r'^logout/$', 'django.contrib.auth.views.logout', { 'next_page': '/' }),
     (r'^settings/$', 'django.contrib.auth.views.password_change', {
-      'template_name': 'password_change_form.html',
       'post_change_redirect': '/'
     }),
 )
