@@ -10,3 +10,6 @@ To get it going, just make sure Django is in your python path, run the
 "refresh" script to set things up and "./manage.py runserver" to run
 the local server.  Run the "refresh" script again whenever you want to
 clear things out and start over.
+
+From there, going to http://127.0.0.1:8000/ should get you to the local
+instance and http://127.0.0.1:8000/admin/ should get you to the local admin.
