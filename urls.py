@@ -16,10 +16,6 @@ urlpatterns += patterns('',
     # Examples:
     # url(r'^$', 'statkeeper.views.home', name='home'),
     # url(r'^statkeeper/', include('statkeeper.foo.urls')),
-
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
-
     #(r'^$', direct_to_template, { 'template': 'index.html' })
 
     (r'^login/$', 'django.contrib.auth.views.login'),
@@ -28,6 +24,12 @@ urlpatterns += patterns('',
       'post_change_redirect': '/'
     }),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+        url(r'^admin/', include(admin.site.urls)),
+    )
 
 if settings.LOCAL_MEDIA:
     urlpatterns += patterns('',
