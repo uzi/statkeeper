@@ -3,3 +3,6 @@
 localsettings.py
 statkeeper.db
 match/fixtures/
+node_modules
+.idea
+*.iml

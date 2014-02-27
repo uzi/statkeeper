@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.views.generic import RedirectView
 
 from django.contrib import admin
 admin.autodiscover()
@@ -22,6 +23,7 @@ urlpatterns += patterns('',
         'post_change_redirect': '/',
         'template_name': 'match/password_change_form.html'
     }),
+    (r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + '/static/match/images/favicon.ico')),
 )
 
 if settings.DEBUG:

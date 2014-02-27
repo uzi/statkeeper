@@ -13,6 +13,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SITE_ID = 1
 
+APP_NAME = "Stat Keeper"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pipeline',
     'match',
 )
 
@@ -77,6 +80,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "match.template_processor.app_data",
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -88,3 +102,34 @@ try:
     execfile(os.path.join(BASE_DIR, 'localsettings.py'))
 except IOError:
     pass
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+PIPELINE_CSS = {
+    'app': {
+        'source_filenames': (
+            'match/css/*.css',
+            'match/css/*.less',
+        ),
+        'output_filename': 'match/css/app.css',
+    },
+}
+
+PIPELINE_JS = {
+    'app': {
+        'source_filenames': (
+            'match/js/contrib/jquery-1.11.0.js',
+            'match/js/contrib/underscore.js',
+            'match/js/contrib/bootstrap.js',
+            'match/js/custom/*.js',
+        ),
+        'output_filename': 'match/js/app.js',
+    }
+}
+
+PIPELINE_COMPILERS = (
+    'pipeline.compilers.less.LessCompiler',
+)
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_LESS_BINARY = "{0}/{1}".format(os.getcwd(), 'node_modules/less/bin/lessc')

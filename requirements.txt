@@ -1,2 +1,5 @@
-django==1.6.2
-docutils
+Django==1.6.2
+django-pipeline==1.3.21
+docutils==0.11
+futures==2.1.6
+wsgiref==0.1.2
