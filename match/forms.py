@@ -23,6 +23,19 @@ class SubmitForm(forms.Form):
       raise forms.ValidationError("Results do not match the format.")
     return results
 
+  def clean(self):
+      cleaned_data = super(SubmitForm, self).clean()
+      winner = cleaned_data.get('winner')
+      loser = cleaned_data.get('loser')
+
+      if winner is None or loser is None:
+          raise forms.ValidationError("Winner and loser must be filled in")
+
+      if winner == loser:
+          raise forms.ValidationError("Winner and loser can not be the same user")
+
+      return cleaned_data
+
   def save(self, request):
     # Default to only do ping pong for now, but leave room for future
     # expansion.  Foosball anyone?
