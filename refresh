@@ -1,10 +1,11 @@
 #!/bin/bash
 
 DATABASE=statkeeper.db
+NOINPUT='--noinput'
 
 # delpyc
 find . -name '*.py[co]' -exec rm -v {} \;
 
 # Rebuild the database
 rm -f $DATABASE
-./manage.py syncdb
+./manage.py syncdb $NOINPUT

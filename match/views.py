@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.views.generic.simple import direct_to_template
+from django.shortcuts import get_object_or_404, render
 
 from models import Match
 from forms import SubmitForm
@@ -46,7 +45,7 @@ def index(request):
 
   records.sort(cmp=percentage_cmp, reverse=True)
 
-  return direct_to_template(request, 'index.html', {
+  return render(request, 'match/index.html', {
     'records': records, 'matches': matches
   })
 
@@ -72,7 +71,7 @@ def user(request, username):
 
   records.sort(cmp=percentage_cmp, reverse=True)
 
-  return direct_to_template(request, 'user.html', {
+  return render(request, 'match/user.html', {
     'who': user, 'records': records, 'matches': matches
   })
 
@@ -81,7 +80,7 @@ def versus(request, username, versus):
   opponent = get_object_or_404(User, username=versus)
   matches = Match.objects.between_users(user, opponent).order_by('-timestamp')
 
-  return direct_to_template(request, 'versus.html', {
+  return render(request, 'match/versus.html', {
     'who': user, 'opponent': opponent, 'matches': matches
   })
 
@@ -93,6 +92,7 @@ def submit(request):
       return HttpResponseRedirect('/')
   else:
     form = SubmitForm()
-  return direct_to_template(request, 'submit.html', {
+  return render(request, 'match/submit.html', {
     'form': form
   })
+
