@@ -6,6 +6,7 @@ from models import Match
 from forms import SubmitForm
 
 from decimal import Decimal as D
+import json
 
 UNDEFINED_PERCENTAGE = '-.---'
 
@@ -96,3 +97,23 @@ def submit(request):
     'form': form
   })
 
+def _get_match_json(match, user_lookup):
+    return {
+        'winner': user_lookup[match.winner_id].username,
+        'loser': user_lookup[match.loser_id].username,
+        'results': match.results,
+        'timestamp': str(match.timestamp),
+    }
+
+def grid(request):
+    users = User.objects.all()
+    user_lookup = {}
+    for user in users:
+        user_lookup[user.id] = user
+
+    # Re-implementation of Brian's Grid
+    matches = [_get_match_json(m, user_lookup) for m in Match.objects.order_by('timestamp')]
+
+    return render(request, 'match/grid.html', {
+        'matches': json.dumps(matches)
+    })

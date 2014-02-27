@@ -24,6 +24,7 @@ urlpatterns += patterns('',
         'template_name': 'match/password_change_form.html'
     }),
     (r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + '/static/match/images/favicon.ico')),
+    url(r'^grid/$', 'match.views.grid', name='grid'),
 )
 
 if settings.DEBUG:
