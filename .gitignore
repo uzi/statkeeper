@@ -5,4 +5,5 @@ statkeeper.db
 match/fixtures/
 node_modules
 .idea
+match/static/match/css/signin.css
 *.iml
