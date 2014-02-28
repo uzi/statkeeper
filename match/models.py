@@ -81,11 +81,6 @@ class Participant(models.Model):
     return '%s had a %s on match id %d' % (self.user.username, self.role_str,
                                            self.match_id)
 
-def make_participants():
-  for m in Match.objects.all():
-    Participant.objects.create(user=m.winner, match=m, role=ParticipantRole.Win)
-    Participant.objects.create(user=m.loser, match=m, role=ParticipantRole.Loss)
-
 # Initialize a TrueSkill environment... we can tweak this if desired
 t = trueskill.TrueSkill()
 
