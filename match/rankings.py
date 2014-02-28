@@ -30,7 +30,7 @@ def compute_rankings_for_match(match):
   for i in xrange(wins):
     winner_ratings, loser_ratings = t.rate([winner_ratings, loser_ratings])
 
-  # Use the fact that things are ordered to update the caches
+  # Use the fact that things are ordered to update objects
   for ranking, rating in zip(loser_rankings, loser_ratings):
     ranking.from_rating(rating)
     ranking.save()
