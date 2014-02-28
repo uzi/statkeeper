@@ -27,6 +27,12 @@ case $1 in
 
     ;;
 
+  pyflakes)
+    # Checks the pythons
+
+    find * -name '*.py' | xargs pyflakes
+    ;;
+
   *)
     echo "Usage: $0 [dump|restore]"
     ;;
