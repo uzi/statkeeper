@@ -11,7 +11,7 @@ def compute_rankings_for_match(match):
   if drawers:
     raise ValueError('Does not handle draws yet.')
   if not winners or not losers:
-    raise ValueError('Ehh?  Missing participants on match id %d' % m.id)
+    raise ValueError('Ehh?  Missing participants on match id %d' % match.id)
 
   # Get the results
   wins, losses = match.parse_results()

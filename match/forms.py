@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from models import Game, Match, Participant, ParticipantRole, Ranking, t
+from models import Game, Match, Participant, ParticipantRole
 from rankings import compute_rankings_for_match
 
 import re
@@ -54,11 +54,11 @@ class SubmitForm(forms.Form):
     match = Match.objects.create(results=results,
                                  submitter=request.user,
                                  game=game)
-    winner = Participant.objects.create(user=self.cleaned_data['winner'],
-                                        match=match,
-                                        role=ParticipantRole.Win)
-    loser = Participant.objects.create(user=self.cleaned_data['loser'],
-                                       match=match,
-                                       role=ParticipantRole.Loss)
+    Participant.objects.create(user=self.cleaned_data['winner'],
+                               match=match,
+                               role=ParticipantRole.Win)
+    Participant.objects.create(user=self.cleaned_data['loser'],
+                               match=match,
+                               role=ParticipantRole.Loss)
 
     compute_rankings_for_match(match)
