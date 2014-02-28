@@ -72,7 +72,8 @@ class ParticipantRole(IntEnum):
 class Participant(models.Model):
   user = models.ForeignKey(User)
   match = models.ForeignKey(Match)
-  role = models.IntegerField(default=ParticipantRole.Unknown)
+  role = models.IntegerField(default=ParticipantRole.Unknown,
+                             choices=ParticipantRole.choices(reverse=True))
 
   @property
   def role_str(self):

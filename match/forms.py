@@ -63,9 +63,9 @@ class SubmitForm(forms.Form):
     # Now take care of the rankings
     wins, losses = match.parse_results()
     winner_ranking, _ = Ranking.objects.get_or_create(user=winner.user,
-                                                   game=game)
+                                                      game=game)
     loser_ranking, _ = Ranking.objects.get_or_create(user=loser.user,
-                                                  game=game)
+                                                     game=game)
     winner_rating = winner_ranking.to_rating()
     loser_rating = loser_ranking.to_rating()
     for i in xrange(losses):
