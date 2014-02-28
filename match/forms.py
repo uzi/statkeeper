@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from models import Game, Match
+from models import Game, Match, Participant, ParticipantRole
+from rankings import compute_rankings_for_match
 
 import re
 
-RESULTS_RE = r'^\d+-\d+(,\d+-\d+)*$'
+RESULTS_RE = r'^\d+-\d+$'
 results_re = re.compile(RESULTS_RE)
 
 class SubmitForm(forms.Form):
@@ -49,9 +50,15 @@ class SubmitForm(forms.Form):
     if game.require_results and not results:
       raise ValueError('That game requires the results.')
 
-    match = Match.objects.create(winner=self.cleaned_data['winner'],
-                                 loser=self.cleaned_data['loser'],
-                                 results=results,
+    # Build the match and its participants
+    match = Match.objects.create(results=results,
                                  submitter=request.user,
                                  game=game)
-    return match
+    Participant.objects.create(user=self.cleaned_data['winner'],
+                               match=match,
+                               role=ParticipantRole.Win)
+    Participant.objects.create(user=self.cleaned_data['loser'],
+                               match=match,
+                               role=ParticipantRole.Loss)
+
+    compute_rankings_for_match(match)
