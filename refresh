@@ -3,7 +3,7 @@
 DATABASE="statkeeper.db"
 FIXTURE="match/fixtures/initial_data.json"
 NOINPUT='--noinput'
-APPS="auth match"
+APPS="auth sessions match"
 
 case $1 in
   restore)
