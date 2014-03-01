@@ -29,7 +29,7 @@ def calculate_winning_percentage(wins, losses):
     return UNDEFINED_PERCENTAGE
   return round_decimal(percentage)
 
-def index(request):
+def index(request, game_type):
   matches = Match.objects.order_by('-timestamp')
 
   records = []

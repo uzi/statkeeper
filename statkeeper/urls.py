@@ -7,9 +7,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('match.views',
     url(r'^$', 'index', name='index'),
-    url(r'^submit/$', 'submit', name='submit'),
-    url(r'^user/(?P<username>\w+)/$', 'user', name='user'),
-    url(r'^user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
+    url(r'^(?P<game_type>\w+)/$', 'index', name='index'),
+    url(r'^(?P<game_type>\w+)/submit/$', 'submit', name='submit'),
+    url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/$', 'user', name='user'),
+    url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
 )
 
 urlpatterns += patterns('',

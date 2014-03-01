@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}{% endblock %}</title>
 		{% block head_extra %}{% endblock %}
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
         {% compressed_css 'app' %}
         {% compressed_js 'app' %}
 	</head>
@@ -23,12 +24,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">{{ app_name }}</a>
+                <!--<a class="navbar-brand" href="/">{{ app_name }}</a>-->
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="/grid/">Grid</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ selected_game_type.name|safe }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% for game in game_types %}
+                                <li><a href="/{{ game.slug }}/">{{ game.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
@@ -47,6 +55,9 @@
             </div>
         </div>
     </nav>
+    <div class="navbar-centered">
+        <a href="/"></a>
+    </div>
     <div class="container-fluid">
         {% block main_content %}{% endblock %}
     </div>
