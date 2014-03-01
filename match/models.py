@@ -11,6 +11,8 @@ class Game(models.Model):
   name = models.CharField(max_length=80, unique=True)
   slug = models.SlugField(max_length=80, unique=True)
   require_results = models.BooleanField(default=False)
+  can_draw = models.BooleanField(default=False)
+  players_per_side = models.IntegerField(default=1)
 
   def __unicode__(self):
     return 'id %d, %s "%s"' % (self.id, self.slug, self.name)
@@ -98,6 +100,9 @@ class Ranking(models.Model):
     self.mu = rating.mu
     self.sigma = rating.sigma
     self.exposure = rating.exposure
+
+  def score(self):
+    return int(self.exposure * 1000)
 
   def __unicode__(self):
     return '%s, trueskill.Rating(mu=%f, sigma=%f), exposure = %f' % (

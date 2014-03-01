@@ -1,18 +1,48 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
-from models import Game, Match, Participant, ParticipantRole
-from rankings import compute_rankings_for_match
+from django.forms.formsets import BaseFormSet
 
-import re
+from models import Match, Participant, ParticipantRole
 
 RESULTS_RE = r'^\d+-\d+$'
 results_re = re.compile(RESULTS_RE)
 
-class SubmitForm(forms.Form):
+class RequiredFormSet(BaseFormSet):
+  def __init__(self, *args, **kwargs):
+    super(RequiredFormSet, self).__init__(*args, **kwargs)
+    for form in self.forms:
+      form.empty_permitted = False
+
+class ParticipantForm(forms.Form):
   queryset = User.objects.order_by('username')
 
   winner = forms.ModelChoiceField(queryset=queryset)
   loser = forms.ModelChoiceField(queryset=queryset)
+
+  def clean(self):
+    cleaned_data = super(ParticipantForm, self).clean()
+    winner = cleaned_data.get('winner')
+    loser = cleaned_data.get('loser')
+
+    if winner is None or loser is None:
+      raise forms.ValidationError("Winner and loser must be filled in")
+
+    return cleaned_data
+
+  def save(self, match):
+    if match is None:
+      raise forms.ValidationError("Need a match to make the participants.")
+
+    Participant.objects.create(user=self.cleaned_data['winner'],
+                               match=match,
+                               role=ParticipantRole.Win)
+    Participant.objects.create(user=self.cleaned_data['loser'],
+                               match=match,
+                               role=ParticipantRole.Loss)
+
+class SubmitForm(forms.Form):
   results = forms.CharField(max_length=255)
 
   def clean_results(self):
@@ -24,28 +54,7 @@ class SubmitForm(forms.Form):
       raise forms.ValidationError("Results do not match the format.")
     return results
 
-  def clean(self):
-      cleaned_data = super(SubmitForm, self).clean()
-      winner = cleaned_data.get('winner')
-      loser = cleaned_data.get('loser')
-
-      if winner is None or loser is None:
-          raise forms.ValidationError("Winner and loser must be filled in")
-
-      if winner == loser:
-          raise forms.ValidationError("Winner and loser can not be the same user")
-
-      return cleaned_data
-
-  def save(self, request):
-    # Default to only do ping pong for now, but leave room for future
-    # expansion.  Foosball anyone?
-    try:
-      game = Game.objects.get(slug='pingpong')
-    except Game.DoesNotExist:
-      game = Game.objects.create(slug='pingpong', name='Ping Pong',
-                                 require_results=True)
-
+  def save(self, request, game):
     results = self.clean_results()
     if game.require_results and not results:
       raise ValueError('That game requires the results.')
@@ -54,11 +63,5 @@ class SubmitForm(forms.Form):
     match = Match.objects.create(results=results,
                                  submitter=request.user,
                                  game=game)
-    Participant.objects.create(user=self.cleaned_data['winner'],
-                               match=match,
-                               role=ParticipantRole.Win)
-    Participant.objects.create(user=self.cleaned_data['loser'],
-                               match=match,
-                               role=ParticipantRole.Loss)
 
-    compute_rankings_for_match(match)
+    return match

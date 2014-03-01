@@ -1,11 +1,39 @@
 #!/bin/bash
 
-DATABASE=statkeeper.db
+DATABASE="statkeeper.db"
+FIXTURE="match/fixtures/initial_data.json"
 NOINPUT='--noinput'
+APPS="auth sessions match"
 
-# delpyc
-find . -name '*.py[co]' -exec rm -v {} \;
+case $1 in
+  restore)
+    # Takes a fixture and creates a fresh db from it
 
-# Rebuild the database
-rm -f $DATABASE
-./manage.py syncdb $NOINPUT
+    # delpyc
+    find . -name '*.py[co]' -exec rm -v {} \;
+
+    # Rebuild the database
+    rm -f $DATABASE
+    ./manage.py syncdb $NOINPUT
+    ;;
+
+  dump)
+    # Creates a new fixture from the db
+
+    FIXTUREDIR=`dirname $FIXTURE`
+    mkdir -p $FIXTUREDIR
+    echo "Writing $FIXTURE ..."
+    ./manage.py dumpdata $APPS --indent=2 > $FIXTURE
+
+    ;;
+
+  pyflakes)
+    # Checks the pythons
+
+    find * -name '*.py' | xargs pyflakes
+    ;;
+
+  *)
+    echo "Usage: $0 [dump|restore]"
+    ;;
+esac
