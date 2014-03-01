@@ -12,17 +12,15 @@
     doesn't want to claim their victory, that's their problem.
   </div>
 
+
   <form method="post" action=".">
-      <p><label for="id_winner">Winner:</label>
-      {{ form.winner }}</p>
-      <p><label for="id_loser">Loser:</label>
-      {{ form.loser }}</p>
+      {{ formset.as_p }}
       <p><label for="id_results">Results:</label>
       {{ form.results }}</p>
       <p>
-      Put the winner's score first, so if the winner won the
-      first game 21-15, lost the second 21-18 and won the third 24-22,
-      then put "21-15,18-21,24-22".  (Leave blank if you don't care.)
+      If applicable, put how many games the winner won and that the
+      loser won.  A best of three with a two to one finish would be
+      "2-1".
       </p>
     <input type="submit" value="Submit" />
     <input type="hidden" name="next" value="/" />

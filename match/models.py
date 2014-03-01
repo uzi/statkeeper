@@ -101,6 +101,9 @@ class Ranking(models.Model):
     self.sigma = rating.sigma
     self.exposure = rating.exposure
 
+  def score(self):
+    return int(self.exposure * 1000)
+
   def __unicode__(self):
     return '%s, trueskill.Rating(mu=%f, sigma=%f), exposure = %f' % (
         self.user.username, self.mu, self.sigma, self.exposure)

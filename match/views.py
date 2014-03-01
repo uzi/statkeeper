@@ -1,13 +1,16 @@
+from collections import Counter
+from decimal import Decimal as D
+from itertools import chain
+
+from django import forms
 from django.contrib.auth.models import User
+from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
-from forms import SubmitForm
-from models import Match, Participant, ParticipantRole, Ranking
-
-from decimal import Decimal as D
-from collections import Counter
-
+from forms import SubmitForm, ParticipantForm, RequiredFormSet
+from models import Game, Match, Participant, ParticipantRole, Ranking
+from rankings import compute_rankings_for_match
 
 UNDEFINED_PERCENTAGE = '-.---'
 
@@ -49,7 +52,7 @@ def index(request):
               'wins': wins,
               'losses': losses,
               'percentage': percentage,
-              'ranking': ranking }
+              'ranking': int(ranking * 1000) }
     records.append(entry)
 
   records.sort(cmp=percentage_cmp, reverse=True)
@@ -100,14 +103,40 @@ def versus(request, username, versus):
   })
 
 def submit(request):
+  # XXX Set this as part of the url
+  try:
+    game = Game.objects.get(slug='pingpong')
+  except Game.DoesNotExist:
+    game = Game.objects.create(slug='pingpong', name='Ping Pong',
+                               require_results=True)
+  # XXX Test doubles by uncommenting this line
+  #game.players_per_side = 2
+
+  ParticipantFormSet = formset_factory(ParticipantForm,
+                                       formset=RequiredFormSet,
+                                       max_num=game.players_per_side,
+                                       extra=game.players_per_side)
+
   if request.method == 'POST':
     form = SubmitForm(request.POST)
-    if form.is_valid():
-      form.save(request)
+    formset = ParticipantFormSet(request.POST)
+    if form.is_valid() and formset.is_valid():
+      # Get all the uids given
+      uid_set = set([ u.id for u in chain.from_iterable([ d.cleaned_data.values() for d in [ f for f in formset.forms ] ])])
+      if len(uid_set) != game.players_per_side * 2:
+        # FIXME This may not be the right way to handle this, but at least
+        #       it doesn't try to save something wrong.
+        raise forms.ValidationError("Cannot repeat participants.")
+
+      match = form.save(request, game)
+      [ f.save(match) for f in formset.forms ]
+
+      compute_rankings_for_match(match)
       return HttpResponseRedirect('/')
   else:
     form = SubmitForm()
+    formset = ParticipantFormSet()
   return render(request, 'match/submit.html', {
-    'form': form
+    'form': form, 'formset': formset
   })
 
