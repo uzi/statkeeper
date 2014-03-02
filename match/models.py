@@ -23,10 +23,10 @@ class MatchManager(models.Manager):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
     return super(MatchManager, self).get_query_set().filter(id__in=match_ids)
 
-  def between_users(self, user, opponent):
+  def between_users(self, user, opponent, game):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
     common_ids = list(Participant.objects.filter(user=opponent, match_id__in=match_ids).values_list('match_id', flat=True))
-    return super(MatchManager, self).get_query_set().filter(id__in=common_ids)
+    return super(MatchManager, self).get_query_set().filter(id__in=common_ids, game=game)
 
 class Match(models.Model):
   results = models.CharField(max_length=255, null=True, blank=True)
@@ -54,6 +54,37 @@ class Match(models.Model):
     wins = int(wins)
     losses = int(losses)
     return wins, losses
+
+  def get_match_participants_for_role(self, role, participants=None, user_lookup=None):
+      if participants is None:
+          participants = self.participant_set.all()
+
+      items = []
+      for participant in participants:
+          if participant.role == role:
+              if participant.user_id in user_lookup:
+                  u = user_lookup[participant.user_id]
+              else:
+                  u = User.objects.get(id=participant.user_id)
+              items.append(u.username)
+
+      if role == ParticipantRole.Win:
+        self._match_winners = items
+      elif role == ParticipantRole.Loss:
+        self._match_losers = items
+      return items
+
+  @property
+  def match_winners(self):
+      if not hasattr(self, '_match_winners'):
+          self._match_winners = self.get_match_participants_for_role(ParticipantRole.Win)
+      return self._match_winners
+
+  @property
+  def match_losers(self):
+      if not hasattr(self, '_match_losers'):
+          self._match_losers = self.get_match_participants_for_role(ParticipantRole.Loss)
+      return self._match_losers
 
   def __unicode__(self):
     when = self.timestamp.strftime('%m/%d/%Y')

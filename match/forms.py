@@ -3,6 +3,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.formsets import BaseFormSet
+from django.forms.widgets import Select, TextInput
 
 from models import Match, Participant, ParticipantRole
 
@@ -18,8 +19,8 @@ class RequiredFormSet(BaseFormSet):
 class ParticipantForm(forms.Form):
   queryset = User.objects.order_by('username')
 
-  winner = forms.ModelChoiceField(queryset=queryset)
-  loser = forms.ModelChoiceField(queryset=queryset)
+  winner = forms.ModelChoiceField(queryset=queryset, widget=Select(attrs={'class': 'form-control'}))
+  loser = forms.ModelChoiceField(queryset=queryset, widget=Select(attrs={'class': 'form-control'}))
 
   def clean(self):
     cleaned_data = super(ParticipantForm, self).clean()
@@ -43,7 +44,7 @@ class ParticipantForm(forms.Form):
                                role=ParticipantRole.Loss)
 
 class SubmitForm(forms.Form):
-  results = forms.CharField(max_length=255)
+  results = forms.CharField(max_length=255, widget=TextInput(attrs={'class': 'form-control'}))
 
   def clean_results(self):
     results = self.cleaned_data.get('results')
