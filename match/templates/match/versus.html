@@ -10,19 +10,19 @@
         <table class="table results-table">
         {% for match in matches %}
             <tr>
-            {% ifequal who match.winner %}
+            {% if who.username in match.match_winners %}
                 <td class="name">
-                    {{ match.winner.username }}
+                    {{ match.match_winners|join:' and ' }}
                     <span class="beat">beat</span>
-                    {{ match.loser.username }}
+                    {{ match.match_losers|join:' and ' }}
                 </td>
             {% else %}
                 <td>
-                    {{ match.loser.username }}
+                    {{ match.match_losers|join:' and ' }}
                     <span class="lost">lost to</span>
-                    {{ match.winner.username }}
+                    {{ match.match_winners|join:' and ' }}
                 </td>
-            {% endifequal %}
+            {% endif %}
             <td>{% if match.results %}({{ match.results }}){% endif %}</td>
             <td align="right">{{ match.timestamp }}</td>
             </tr>

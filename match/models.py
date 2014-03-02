@@ -19,9 +19,9 @@ class Game(models.Model):
 
 class MatchManager(models.Manager):
 
-  def for_user(self, user):
+  def for_user(self, user, game):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
-    return super(MatchManager, self).get_query_set().filter(id__in=match_ids)
+    return super(MatchManager, self).get_query_set().filter(id__in=match_ids, game=game)
 
   def between_users(self, user, opponent, game):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
@@ -35,16 +35,6 @@ class Match(models.Model):
   game = models.ForeignKey(Game)
 
   objects = MatchManager()
-
-  # XXX winner and loser are for backwards compatibility to the old model
-  #     and should go away because they're terribly inefficient
-  @property
-  def winner(self):
-    return self.participant_set.filter(role=ParticipantRole.Win)[0].user
-
-  @property
-  def loser(self):
-    return self.participant_set.filter(role=ParticipantRole.Loss)[0].user
 
   def parse_results(self):
     if not self.results:
