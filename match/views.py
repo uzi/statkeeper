@@ -178,22 +178,35 @@ def submit(request, game_type):
     'form': form, 'formset': formset
   })
 
-def _get_match_json(match, user_lookup):
+def _get_match_json(match, user_lookup, match_participants):
+    participants = match_participants[match.id]
+    winners = []
+    losers = []
+    for participant in participants:
+        if participant.role == ParticipantRole.Win:
+            winners.append(user_lookup[participant.user_id].username)
+        elif participant.role == ParticipantRole.Loss:
+            losers.append(user_lookup[participant.user_id].username)
+
     return {
-        'winner': user_lookup[match.winner_id].username,
-        'loser': user_lookup[match.loser_id].username,
+        'winner': ' and '.join(winners),
+        'loser': ' and '.join(losers),
         'results': match.results,
         'timestamp': str(match.timestamp),
     }
 
-def grid(request):
+def grid(request, game_type):
+    game = get_object_or_404(Game, slug=game_type)
     users = User.objects.all()
     user_lookup = {}
     for user in users:
         user_lookup[user.id] = user
 
-    # Re-implementation of Brian's Grid
-    matches = [_get_match_json(m, user_lookup) for m in Match.objects.order_by('timestamp')]
+    matches = Match.objects.filter(game=game).order_by('timestamp')
+    match_ids = matches.values_list('id', flat=True)
+    match_participants = _get_match_participants_for_match_ids(match_ids)
+
+    matches = [_get_match_json(m, user_lookup, match_participants) for m in matches]
 
     return render(request, 'match/grid.html', {
         'matches': json.dumps(matches)
