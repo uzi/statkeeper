@@ -30,7 +30,6 @@ urlpatterns += patterns('match.views',
                        url(r'^$', 'landing', name='landing'),
                        url(r'^(?P<game_type>\w+)/$', 'index', name='index'),
                        url(r'^(?P<game_type>\w+)/submit/$', 'submit', name='submit'),
-                       url(r'^(?P<game_type>\w+)/rankings/$', 'rankings', name='rankings'),
                        url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/$', 'user', name='user'),
                        url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
                        )
