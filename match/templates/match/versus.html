@@ -4,27 +4,33 @@
 
 {% block main_content %}
 
-<div class="history">
-	<div>{{ who.username }} versus {{ opponent.username }} history:</div>
-	<table>
-	{% for match in matches %}
-		<tr>
-		{% ifequal who match.winner %}
-			<td>{{ match.winner.username }}</td>
-			<td><span class="beat">beat</span></td>
-			<td>{{ match.loser.username }}</td>
-		{% else %}
-			<td>{{ match.loser.username }}</td>
-			<td><span class="lost">lost to</span></td>
-			<td>{{ match.winner.username }}</td>
-		{% endifequal %}
-		<td>{% if match.results %}({{ match.results }}){% endif %}</td>
-		<td>on {{ match.timestamp }}</td>
-		</tr>
-	{% empty %}
-		<tr><td>Nothing yet.</td></tr>
-	{% endfor %}
-	</table>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3>{{ who.username }} versus {{ opponent.username }} history</h3>
+        <table class="table results-table">
+        {% for match in matches %}
+            <tr>
+            {% if who.username in match.match_winners %}
+                <td class="name">
+                    {{ match.match_winners|join:' and ' }}
+                    <span class="beat">beat</span>
+                    {{ match.match_losers|join:' and ' }}
+                </td>
+            {% else %}
+                <td>
+                    {{ match.match_losers|join:' and ' }}
+                    <span class="lost">lost to</span>
+                    {{ match.match_winners|join:' and ' }}
+                </td>
+            {% endif %}
+            <td>{% if match.results %}({{ match.results }}){% endif %}</td>
+            <td align="right">{{ match.timestamp }}</td>
+            </tr>
+        {% empty %}
+            <tr><td>Nothing yet.</td></tr>
+        {% endfor %}
+        </table>
+    </div>
 </div>
 
 {% endblock %}

@@ -5,14 +5,7 @@ from django.views.generic import RedirectView
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('match.views',
-    url(r'^$', 'index', name='index'),
-    url(r'^submit/$', 'submit', name='submit'),
-    url(r'^user/(?P<username>\w+)/$', 'user', name='user'),
-    url(r'^user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
-)
-
-urlpatterns += patterns('',
+urlpatterns = patterns('',
     (r'^login/$', 'django.contrib.auth.views.login', {
         'template_name': 'match/login.html'
     }),
@@ -24,6 +17,7 @@ urlpatterns += patterns('',
         'template_name': 'match/password_change_form.html'
     }),
     (r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + '/static/match/images/favicon.ico')),
+    url(r'^grid/$', 'match.views.grid', name='grid'),
 )
 
 if settings.DEBUG:
@@ -31,3 +25,12 @@ if settings.DEBUG:
         url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
         url(r'^admin/', include(admin.site.urls)),
     )
+
+urlpatterns += patterns('match.views',
+                       url(r'^$', 'landing', name='landing'),
+                       url(r'^(?P<game_type>\w+)/$', 'index', name='index'),
+                       url(r'^(?P<game_type>\w+)/submit/$', 'submit', name='submit'),
+                       url(r'^(?P<game_type>\w+)/rankings/$', 'rankings', name='rankings'),
+                       url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/$', 'user', name='user'),
+                       url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
+                       )

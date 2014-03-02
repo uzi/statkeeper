@@ -1,36 +1,73 @@
 {% extends "match/base.html" %}
 
 {% block title %}Ping Pong{% endblock %}
+{% block head_extra %}
+    <script>
+        $(document).ready(function() {
+            $('#SeeAll').click(function() {
+                $("table .hidden").removeClass('hidden');
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
 
 {% block main_content %}
+{% load humanize %}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3>Rankings</h3>
+        <table class="table rank-table">
+            {% for record in records %}
+                <tr class="{% if forloop.counter > 10 %}hidden{% endif %}">
+                    <td class="rank">{{ forloop.counter }}</td>
+                    <td class="name">
+                        <a href="/{{ selected_game_type.slug|safe }}/user/{{ record.name }}">{{ record.name }}</a>
+                    </td>
+                    <td class="ranking">{{ record.ranking|intcomma }}</td>
+                    <td class="record" align="right">{{ record.wins }}-{{ record.losses }}</td>
+                    <td class="percentage" align="right">{{ record.percentage }}</td>
+                </tr>
+            {% empty %}
+                No standings
+            {% endfor %}
+            {% if records %}
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <a href="#" id="SeeAll">See All</a> <span>|</span> <a href="#">Grid View</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            {% endif %}
+        </table>
 
-<div class="history">
-	<div class="history_title">Overall History:</div>
-	<table>
-	{% for match in matches %}
-		<tr>
-			<td>{{ match.winner.username }}</td>
-			<td><span class="beat">beat</span></td>
-			<td>{{ match.loser.username }}</td>
-			<td>{% if match.results %}({{ match.results }}){% endif %}</td>
-			<td>on {{ match.timestamp }}</td>
-		</tr>
-	{% empty %}
-		<tr><td>Nothing yet.</td></tr>
-	{% endfor %}
-	</table>
+    </div>
 </div>
 
-<div class="records">
-	<div class="records_title">Overall Records:</div>
-	{% for record in records %}
-	<div>
-		<a href="user/{{ record.name }}/">{{ record.name }}</a>:
-		{{ record.wins }} - {{ record.losses }}
-		({{ record.percentage }})
-		({{ record.ranking }})
-	</div>
-	{% endfor %}
+<div clas="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3>Match History</h3>
+        <table class="table results-table">
+            {% for match in matches %}
+                <tr>
+                    <td>
+                        {{ match.match_winners|join:' and ' }}
+                        <span class="beat">beat</span>
+                        {{ match.match_losers|join:' and ' }}
+                    </td>
+                    <td>
+                        {{ match.results }}
+                    </td>
+                    <td class="date" align="right">
+                        {{ match.timestamp|date:"F j, Y" }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td>Nothing yet.</td></tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 
 {% endblock %}

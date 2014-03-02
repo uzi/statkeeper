@@ -1,0 +1,117 @@
+.retina-image(@path, @w: 100%, @h: 100%, @important: "") {
+  background-image: ~"url(@{path}) @{important}";
+  background-size: @w @h;
+  @at2x_path: ~`@{path}.split(".").slice(0, @{path}.split(".").length - 1).join(".") + "@2x" + "." + @{path}.split(".")[@{path}.split(".").length - 1]`;
+
+  // this is in here 5 times because less wont work with it as a single rule, which it should.
+  @media all and (-moz-min-device-pixel-ratio: 1.5) {
+    background-image: ~"url(@{at2x_path}) @{important}";
+  }
+    @media all and (~"-o-min-device-pixel-ratio: 3/2") {
+  background-image: ~"url(@{at2x_path}) @{important}";
+  }
+    @media all and (-webkit-min-device-pixel-ratio: 1.5) {
+      background-image: ~"url(@{at2x_path}) @{important}";
+    }
+  @media all and (min-devicepixel-ratio: 1.5) {
+    background-image: ~"url(@{at2x_path}) @{important}";
+  }
+  @media all and (~"min-resolution: 1.5dppx") {
+    background-image: ~"url(@{at2x_path}) @{important}";
+  }
+}
+
+body {
+  font-family: 'Source Sans Pro', "Helvetica Neue",helvetica,arial,sans-serif;
+  color: #5E6C74;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, #E9F8FB),
+    color-stop(1, #EAEBEB)
+  );
+  background-image: -o-linear-gradient(bottom, #E9F8FB 0%, #EAEBEB 100%);
+  background-image: -moz-linear-gradient(bottom, #E9F8FB 0%, #EAEBEB 100%);
+  background-image: -webkit-linear-gradient(bottom, #E9F8FB 0%, #EAEBEB 100%);
+  background-image: -ms-linear-gradient(bottom, #E9F8FB 0%, #EAEBEB 100%);
+  background-image: linear-gradient(to bottom, #E9F8FB 0%, #EAEBEB 100%);
+}
+
+.navbar,
+.navbar-default {
+  background: none;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  text-transform: uppercase;
+}
+
+.navbar-centered {
+  width: 61px;
+  height: 50px;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+
+  a {
+    .retina-image('/static/match/images/logo.png', 61px, 50px);
+    width: 61px;
+    height: 50px;
+    display: block;
+  }
+}
+
+h3 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #5E6C74;
+}
+
+.rank-table,
+.results-table {
+  color: #5E6C74;
+  font-size: 24px;
+  font-weight: lighter;
+
+  a {
+    color: #5E6C74;
+  }
+
+  .rank {
+    opacity: .5;
+  }
+
+  .ranking,
+  .record,
+  .percentage {
+    font-size: 21px;
+  }
+
+  .percentage,
+  .date {
+    opacity: .5;
+  }
+
+  tfoot {
+    background: #DDE6EA;
+    text-align: center;
+
+    a, span {
+      font-size: 14px;
+      color: #5E6C74;
+      opacity: .5;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.beat,
+.lost {
+  padding: 0 10px;
+}
