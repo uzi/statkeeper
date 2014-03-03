@@ -37,6 +37,7 @@ case $1 in
     # Build up the static files -- npm install required
 
     PATH=$PATH:node_modules/yuglify/bin:node_modules/less/bin ./manage.py collectstatic
+    ;;
 
   *)
     echo "Usage: $0 [dump|restore]"
