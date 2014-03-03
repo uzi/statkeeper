@@ -99,11 +99,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-try:
-    execfile(os.path.join(BASE_DIR, 'localsettings.py'))
-except IOError:
-    pass
-
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE_CSS = {
@@ -133,4 +128,9 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_LESS_BINARY = "{0}/{1}".format(os.getcwd(), 'node_modules/less/bin/lessc')
+PIPELINE_LESS_BINARY = os.path.join(BASE_DIR, 'node_modules', 'less', 'bin', 'lessc')
+
+try:
+    execfile(os.path.join(BASE_DIR, 'localsettings.py'))
+except IOError:
+    pass
