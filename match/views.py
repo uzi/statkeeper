@@ -61,6 +61,9 @@ def index(request, game_type):
     percentage = calculate_winning_percentage(wins, losses)
     ranking = rankings.get(user.id, 0.0)
 
+    if percentage == UNDEFINED_PERCENTAGE:
+      continue
+
     entry = { 'name': name,
               'wins': wins,
               'losses': losses,
@@ -107,6 +110,10 @@ def user(request, game_type, username):
               'wins': wins,
               'losses': losses,
               'percentage': percentage }
+
+    if percentage == UNDEFINED_PERCENTAGE:
+      continue
+
     records.append(entry)
 
   records.sort(cmp=percentage_cmp, reverse=True)
