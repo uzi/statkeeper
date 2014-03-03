@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
       ratings_cache = {}
 
-      for match in Match.objects.all().order_by('timestamp'):
+      for match in Match.objects.filter(game=game).order_by('timestamp'):
         # Find all the participants for this match and split 'em out
         participants = list(match.participant_set.all())
         winners = [ p for p in participants if p.role == ParticipantRole.Win ]
