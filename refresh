@@ -33,6 +33,11 @@ case $1 in
     find * -name '*.py' | xargs pyflakes
     ;;
 
+  static)
+    # Build up the static files -- npm install required
+
+    PATH=$PATH:node_modules/yuglify/bin:node_modules/less/bin ./manage.py collectstatic
+
   *)
     echo "Usage: $0 [dump|restore]"
     ;;
