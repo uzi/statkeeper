@@ -3,17 +3,17 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>{% block title %}{% endblock %}</title>
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
-        {% compressed_css 'app' %}
-        {% compressed_js 'app' %}
-        {% block head_extra %}{% endblock %}
-	</head>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+    {% compressed_css 'app' %}
+    {% compressed_js 'app' %}
+    {% block head_extra %}{% endblock %}
+  </head>
 
-	<body>
+  <body>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -56,10 +56,10 @@
         </div>
     </nav>
     <div class="navbar-centered">
-        <a href="/"></a>
+        <a href="/{{ selected_game_type.slug|safe }}/"></a>
     </div>
     <div class="container-fluid">
         {% block main_content %}{% endblock %}
     </div>
-	</body>
+  </body>
 </html>
