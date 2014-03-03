@@ -88,7 +88,7 @@ def user(request, game_type, username):
   game = Game.objects.get(slug=game_type)
   matches = Match.objects.for_user(user, game).order_by('-timestamp')
 
-  match_ids = [match.id for match in matches]
+  match_ids = list(matches.values_list('id', flat=True))
   match_participants = _get_match_participants_for_match_ids(match_ids)
 
   records = []
@@ -145,13 +145,7 @@ def versus(request, game_type, username, versus):
   })
 
 def submit(request, game_type):
-  # XXX Set this as part of the url
-  try:
-    game = Game.objects.get(slug=game_type)
-  except Game.DoesNotExist:
-    game = Game.objects.create(slug='pingpong', name='Ping Pong',
-                               require_results=True)
-
+  game = get_object_or_404(Game, slug=game_type)
   ParticipantFormSet = formset_factory(ParticipantForm,
                                        formset=RequiredFormSet,
                                        max_num=game.players_per_side,

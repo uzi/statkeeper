@@ -48,18 +48,18 @@ class Match(models.Model):
     losses = int(losses)
     return wins, losses
 
-  def get_match_participants_for_role(self, role, participants=None, user_lookup=None):
+  def get_match_participants_for_role(self, role, participants=None,
+                                      user_lookup=None):
     if participants is None:
       participants = self.participant_set.all()
     if user_lookup is None:
-      user_lookup = []
+      user_lookup = {}
 
     items = []
     for participant in participants:
       if participant.role == role:
-        if participant.user_id in user_lookup:
-          u = user_lookup[participant.user_id]
-        else:
+        u = user_lookup.get(participant.user_id)
+        if u is None:
           u = User.objects.get(id=participant.user_id)
         items.append(u.username)
 
