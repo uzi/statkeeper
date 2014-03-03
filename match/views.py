@@ -174,51 +174,51 @@ def submit(request, game_type):
   })
 
 def _get_match_json(match, user_lookup, match_participants):
-    participants = match_participants[match.id]
-    winners = []
-    losers = []
-    for participant in participants:
-        if participant.role == ParticipantRole.Win:
-            winners.append(user_lookup[participant.user_id].username)
-        elif participant.role == ParticipantRole.Loss:
-            losers.append(user_lookup[participant.user_id].username)
+  participants = match_participants[match.id]
+  winners = []
+  losers = []
+  for participant in participants:
+    if participant.role == ParticipantRole.Win:
+      winners.append(user_lookup[participant.user_id].username)
+    elif participant.role == ParticipantRole.Loss:
+      losers.append(user_lookup[participant.user_id].username)
 
-    return {
-        'winner': ' and '.join(winners),
-        'loser': ' and '.join(losers),
-        'results': match.results,
-        'timestamp': str(match.timestamp),
-    }
+  return {
+    'winner': ' and '.join(winners),
+    'loser': ' and '.join(losers),
+    'results': match.results,
+    'timestamp': str(match.timestamp),
+  }
 
 def grid(request, game_type):
-    game = get_object_or_404(Game, slug=game_type)
-    users = User.objects.all()
-    user_lookup = {}
-    for user in users:
-        user_lookup[user.id] = user
+  game = get_object_or_404(Game, slug=game_type)
+  users = User.objects.all()
+  user_lookup = {}
+  for user in users:
+    user_lookup[user.id] = user
 
-    matches = Match.objects.filter(game=game).order_by('timestamp')
-    match_ids = matches.values_list('id', flat=True)
-    match_participants = _get_match_participants_for_match_ids(match_ids)
+  matches = Match.objects.filter(game=game).order_by('timestamp')
+  match_ids = matches.values_list('id', flat=True)
+  match_participants = _get_match_participants_for_match_ids(match_ids)
 
-    matches = [_get_match_json(m, user_lookup, match_participants) for m in matches]
+  matches = [_get_match_json(m, user_lookup, match_participants) for m in matches]
 
-    return render(request, 'match/grid.html', {
-        'matches': json.dumps(matches)
-    })
+  return render(request, 'match/grid.html', {
+    'matches': json.dumps(matches)
+  })
 
 def _get_match_participants_for_match_ids(match_ids):
-    participants = Participant.objects.filter(match_id__in=match_ids)
-    match_participants = {}
-    for participant in participants:
-        if participant.match_id not in match_participants:
-            match_participants[participant.match_id] = []
-        match_participants[participant.match_id].append(participant)
+  participants = Participant.objects.filter(match_id__in=match_ids)
+  match_participants = {}
+  for participant in participants:
+    if participant.match_id not in match_participants:
+      match_participants[participant.match_id] = []
+    match_participants[participant.match_id].append(participant)
 
-    return match_participants
+  return match_participants
 
 def _cache_match_participants(matches, match_participants, user_lookup):
-    # Cache these
-    [(m.get_match_participants_for_role(ParticipantRole.Win, match_participants[m.id], user_lookup),
-      m.get_match_participants_for_role(ParticipantRole.Loss, match_participants[m.id], user_lookup))
-     for m in matches]
+  # Cache these
+  [(m.get_match_participants_for_role(ParticipantRole.Win, match_participants[m.id], user_lookup),
+    m.get_match_participants_for_role(ParticipantRole.Loss, match_participants[m.id], user_lookup))
+   for m in matches]

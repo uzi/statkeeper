@@ -49,40 +49,43 @@ class Match(models.Model):
     return wins, losses
 
   def get_match_participants_for_role(self, role, participants=None, user_lookup=None):
-      if participants is None:
-          participants = self.participant_set.all()
+    if participants is None:
+      participants = self.participant_set.all()
+    if user_lookup is None:
+      user_lookup = []
 
-      items = []
-      for participant in participants:
-          if participant.role == role:
-              if participant.user_id in user_lookup:
-                  u = user_lookup[participant.user_id]
-              else:
-                  u = User.objects.get(id=participant.user_id)
-              items.append(u.username)
+    items = []
+    for participant in participants:
+      if participant.role == role:
+        if participant.user_id in user_lookup:
+          u = user_lookup[participant.user_id]
+        else:
+          u = User.objects.get(id=participant.user_id)
+        items.append(u.username)
 
-      if role == ParticipantRole.Win:
-        self._match_winners = items
-      elif role == ParticipantRole.Loss:
-        self._match_losers = items
-      return items
+    if role == ParticipantRole.Win:
+      self._match_winners = items
+    elif role == ParticipantRole.Loss:
+      self._match_losers = items
+    return items
 
   @property
   def match_winners(self):
-      if not hasattr(self, '_match_winners'):
-          self._match_winners = self.get_match_participants_for_role(ParticipantRole.Win)
-      return self._match_winners
+    if not hasattr(self, '_match_winners'):
+      self._match_winners = self.get_match_participants_for_role(ParticipantRole.Win)
+    return self._match_winners
 
   @property
   def match_losers(self):
-      if not hasattr(self, '_match_losers'):
-          self._match_losers = self.get_match_participants_for_role(ParticipantRole.Loss)
-      return self._match_losers
+    if not hasattr(self, '_match_losers'):
+      self._match_losers = self.get_match_participants_for_role(ParticipantRole.Loss)
+    return self._match_losers
 
   def __unicode__(self):
     when = self.timestamp.strftime('%m/%d/%Y')
-    return 'id %d, %s beat %s on %s' % (self.id, self.winner.username,
-                                        self.loser.username, when)
+    winners = '/'.join(self.match_winners)
+    losers = '/'.join(self.match_losers)
+    return 'id %d, %s beat %s on %s' % (self.id, winners, losers, when)
 
   class Meta:
     verbose_name_plural = 'matches'
