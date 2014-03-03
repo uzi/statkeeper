@@ -1,6 +1,7 @@
 from collections import Counter
 from decimal import Decimal as D
 from itertools import chain
+import json
 
 from django import forms
 from django.contrib.auth.models import User
@@ -8,12 +9,6 @@ from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 
-from forms import SubmitForm
-from models import Match, Participant, ParticipantRole, Ranking
-
-from decimal import Decimal as D
-import json
-from collections import Counter
 from forms import SubmitForm, ParticipantForm, RequiredFormSet
 from models import Game, Match, Participant, ParticipantRole, Ranking
 from rankings import compute_rankings_for_match
