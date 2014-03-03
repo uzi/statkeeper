@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'match.middleware.RestrictAdminToStaffMiddleware',
 )
 
 ROOT_URLCONF = 'statkeeper.urls'
