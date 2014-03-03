@@ -54,9 +54,10 @@ MIDDLEWARE_CLASSES = (
     'match.middleware.RestrictAdminToStaffMiddleware',
 )
 
-ROOT_URLCONF = 'statkeeper.urls'
+APP_NAME = 'statkeeper'
+ROOT_URLCONF = '%s.urls' % APP_NAME
 
-WSGI_APPLICATION = 'statkeeper.wsgi.application'
+WSGI_APPLICATION = '%s.wsgi.application' % APP_NAME
 
 
 # Database
@@ -65,7 +66,7 @@ WSGI_APPLICATION = 'statkeeper.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'statkeeper.db'),
+        'NAME': os.path.join(BASE_DIR, '%s.db' % APP_NAME),
     }
 }
 
@@ -132,6 +133,6 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_LESS_BINARY = os.path.join(BASE_DIR, 'node_modules', 'less', 'bin', 'lessc')
 
 try:
-    execfile(os.path.join(BASE_DIR, 'localsettings.py'))
+    execfile(os.path.join(BASE_DIR, APP_NAME, 'localsettings.py'))
 except IOError:
     pass
