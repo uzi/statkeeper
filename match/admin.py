@@ -7,7 +7,11 @@ class ParticipantInline(admin.TabularInline):
 
 class MatchAdmin(admin.ModelAdmin):
   inlines = [ ParticipantInline ]
+  list_filter = ('game__name',)
+
+class RankingAdmin(admin.ModelAdmin):
+  list_filter = ('game__name',)
 
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Game)
-admin.site.register(Ranking)
+admin.site.register(Ranking, RankingAdmin)
