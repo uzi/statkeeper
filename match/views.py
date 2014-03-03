@@ -165,7 +165,7 @@ def submit(request, game_type):
       [ f.save(match) for f in formset.forms ]
 
       compute_rankings_for_match(match)
-      return HttpResponseRedirect('/')
+      return HttpResponseRedirect(game.get_absolute_url())
   else:
     form = SubmitForm()
     formset = ParticipantFormSet()

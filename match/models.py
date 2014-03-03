@@ -14,6 +14,9 @@ class Game(models.Model):
   can_draw = models.BooleanField(default=False)
   players_per_side = models.IntegerField(default=1)
 
+  def get_absolute_url(self):
+    return '/%s/' % self.slug
+
   def __unicode__(self):
     return 'id %d, %s "%s"' % (self.id, self.slug, self.name)
 
