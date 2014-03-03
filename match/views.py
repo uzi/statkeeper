@@ -83,7 +83,7 @@ def index(request, game_type):
 def user(request, game_type, username):
   user = get_object_or_404(User, username=username)
   game = Game.objects.get(slug=game_type)
-  matches = [match for match in Match.objects.for_user(user, game).order_by('-timestamp') if match.game_id == game.id]
+  matches = Match.objects.for_user(user, game).order_by('-timestamp')
 
   match_ids = [match.id for match in matches]
   match_participants = _get_match_participants_for_match_ids(match_ids)
