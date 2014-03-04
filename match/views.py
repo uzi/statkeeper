@@ -170,6 +170,9 @@ def submit(request, game_type):
   else:
     form = SubmitForm()
     formset = ParticipantFormSet()
+
+    # Prepopulate the user as a winner
+    formset.forms[0].initial['winner'] = request.user
   return render(request, 'match/submit.html', {
     'form': form, 'formset': formset
   })
