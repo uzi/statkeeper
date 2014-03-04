@@ -232,16 +232,18 @@ def grid(request, game_type):
 
 def _get_match_participants_for_match_ids(match_ids):
   participants = Participant.objects.filter(match_id__in=match_ids)
-  match_participants = {}
+  match_participants = defaultdict(list)
   for participant in participants:
-    if participant.match_id not in match_participants:
-      match_participants[participant.match_id] = []
     match_participants[participant.match_id].append(participant)
 
   return match_participants
 
 def _cache_match_participants(matches, match_participants, user_lookup):
   # Cache these
-  [(m.get_match_participants_for_role(ParticipantRole.Win, match_participants[m.id], user_lookup),
-    m.get_match_participants_for_role(ParticipantRole.Loss, match_participants[m.id], user_lookup))
-   for m in matches]
+  for m in matches:
+    m.get_match_participants_for_role(ParticipantRole.Win,
+                                      match_participants[m.id],
+                                      user_lookup)
+    m.get_match_participants_for_role(ParticipantRole.Loss,
+                                      match_participants[m.id],
+                                      user_lookup)
