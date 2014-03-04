@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 from decimal import Decimal as D
 from itertools import chain
 import json
@@ -93,9 +93,28 @@ def user(request, game_type, username):
 
   records = []
 
+  # This is a mapping of a user's role in a match.
+  # Needed for spotting users who are teammates.
+  # Not needed when there's only one player on a side.
+  match_role_map = {}
+  if game.players_per_side > 1:
+    match_role_map = dict(Participant.objects.filter(user=user, match_id__in=match_ids).values_list('match_id', 'role'))
+
   # Note we go backwards on this because we loop over the opponents
-  win_count = Counter(Participant.objects.filter(match_id__in=match_ids, role=ParticipantRole.Loss).values_list('user_id', flat=True))
-  loss_count = Counter(Participant.objects.filter(match_id__in=match_ids, role=ParticipantRole.Win).values_list('user_id', flat=True))
+  win_count = defaultdict(int)
+  loss_count = defaultdict(int)
+  for p in Participant.objects.filter(match_id__in=match_ids):
+    if p.user_id == user.id:
+      continue
+
+    # Skip users who are teammates
+    if p.role == match_role_map.get(p.match_id):
+      continue
+
+    if p.role == ParticipantRole.Loss:
+      win_count[p.user_id] += 1
+    elif p.role == ParticipantRole.Win:
+      loss_count[p.user_id] += 1
 
   for opponent in User.objects.all():
     if user == opponent:
