@@ -37,7 +37,12 @@ def calculate_winning_percentage(wins, losses):
   return round_decimal(percentage)
 
 def landing(request):
-  return redirect('index', game_type=Game.objects.first().slug)
+  games = Game.objects.all()
+
+  return render(request, 'match/landing.html', {
+    'games': games,
+  })
+
 
 def index(request, game_type):
   game = get_object_or_404(Game, slug=game_type)

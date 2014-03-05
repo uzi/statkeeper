@@ -14,6 +14,20 @@ class Game(models.Model):
   can_draw = models.BooleanField(default=False)
   players_per_side = models.IntegerField(default=1)
 
+  @property
+  def total_participants(self):
+    # We can cheat and use the number of rankings for a game to
+    # see how many participants there are.
+    return Ranking.objects.filter(game=self).count()
+
+  @property
+  def total_matches(self):
+    return self.match_set.count()
+
+  @property
+  def latest_match(self):
+    return self.match_set.latest()
+
   def get_absolute_url(self):
     return '/%s/' % self.slug
 
@@ -89,6 +103,7 @@ class Match(models.Model):
 
   class Meta:
     verbose_name_plural = 'matches'
+    get_latest_by = 'timestamp'
 
 class ParticipantRole(IntEnum):
   Unknown = 0
