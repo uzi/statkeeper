@@ -101,7 +101,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+# XXX Want to use this one, but it isn't jiving at the moment
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 PIPELINE_CSS = {
     'app': {
