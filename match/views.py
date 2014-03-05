@@ -24,7 +24,7 @@ def percentage_cmp(a, b):
   return cmp(a['percentage'], b['percentage'])
 
 def rankings_cmp(a, b):
-    return cmp(a['ranking'], b['ranking'])
+  return cmp(a['ranking'], b['ranking'])
 
 def round_decimal(val, decimal_places=3):
   return val.quantize(D(10) ** -decimal_places)
@@ -37,7 +37,7 @@ def calculate_winning_percentage(wins, losses):
   return round_decimal(percentage)
 
 def landing(request):
-    return redirect('index', game_type=Game.objects.first().slug)
+  return redirect('index', game_type=Game.objects.first().slug)
 
 def index(request, game_type):
   game = get_object_or_404(Game, slug=game_type)
