@@ -37,7 +37,7 @@ def calculate_winning_percentage(wins, losses):
   return round_decimal(percentage)
 
 def landing(request):
-  games = Game.objects.all()
+  games = Game.objects.all().order_by('name')
 
   return render(request, 'match/landing.html', {
     'games': games,
