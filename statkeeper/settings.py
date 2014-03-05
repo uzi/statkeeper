@@ -116,7 +116,6 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'app': {
         'source_filenames': (
-            'match/js/contrib/jquery-2.1.0.min.js',
             'match/js/contrib/underscore.js',
             'match/js/contrib/bootstrap.js',
             'match/js/custom/*.js',
