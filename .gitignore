@@ -8,3 +8,4 @@ match/fixtures/
 node_modules
 match/static/match/css/signin.css
 match/static/match/css/main.css
+/static/
