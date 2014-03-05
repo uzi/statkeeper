@@ -101,9 +101,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# XXX Want to use this one, but it isn't jiving at the moment
-#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE_CSS = {
     'app': {
@@ -118,7 +116,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'app': {
         'source_filenames': (
-            'match/js/contrib/jquery-1.11.0.js',
+            'match/js/contrib/jquery-2.1.0.min.js',
             'match/js/contrib/underscore.js',
             'match/js/contrib/bootstrap.js',
             'match/js/custom/*.js',
