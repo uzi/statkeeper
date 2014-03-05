@@ -130,7 +130,10 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_LESS_BINARY = os.path.join(BASE_DIR, 'node_modules', 'less', 'bin', 'lessc')
+
+NODE_DIR = os.path.join(BASE_DIR, 'node_modules')
+PIPELINE_YUGLIFY_BINARY = os.path.join(NODE_DIR, 'yuglify', 'bin', 'yuglify')
+PIPELINE_LESS_BINARY = os.path.join(NODE_DIR, 'less', 'bin', 'lessc')
 
 try:
     execfile(os.path.join(BASE_DIR, APP_NAME, 'localsettings.py'))
