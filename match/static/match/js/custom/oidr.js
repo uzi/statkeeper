@@ -19,7 +19,7 @@ $.extend(Person.prototype, {
     this.losses = 0;
   },
   url: function() {
-    return 'user/' + this.name + '/';
+    return '/user/' + this.name + '/';
   }
 });
 
