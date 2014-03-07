@@ -32,3 +32,9 @@ urlpatterns += patterns('match.views',
     url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/$', 'user', name='user'),
     url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
 )
+
+# Uncomment this to serve static files for testing. NO NOT USE IN PRODUCTION.
+#urlpatterns += patterns('',
+#    url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
+#        {'document_root': settings.STATIC_ROOT}),
+#)
