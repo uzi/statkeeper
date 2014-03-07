@@ -1,16 +1,15 @@
 # StatKeeper
+============
 
-----
-
-## Overview
+Overview
+--------
 
 At [Rdio](http://rdio.com/), we have a ping pong table and some folks who like to talk a big game.  This was hacked up in order to keep a record of the fierce office competition we have going.  The code can support more than the one game and even rudimentary team sports like doubles ping pong.
 
 An example can be seen at http://oidr.net/.
 
----
-
-## Instructions
+Instructions
+------------
 
 It's just a Django app.  Recommended for running it are pip, virtualenv and [npm](https://www.npmjs.org/).  Set up your python virtual environment and then do a
 
@@ -32,7 +31,8 @@ ALLOWED_HOSTS = ['example.com', 'example.com.']
 PIPELINE_ENABLED = False
 
 # Your DB info here
-#DATABASES = { ... }```
+#DATABASES = { ... }
+```
 
 Then static files can be deployed with a
 
@@ -40,8 +40,7 @@ Then static files can be deployed with a
 
 and should be served separately from the rest of the app.  A few lines in urls.py can be uncommented to allow production style deployment in testing.
 
----
-
-## Credits
+Credits
+-------
 
 Written by Joshua "uzi" Uziel in a few nights for fun.  Later extended and polished up as a Hackday project by Joshua "uzi" Uziel, Joe Gasiorek, Nod Raber and Mike Towber.
