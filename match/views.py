@@ -169,7 +169,7 @@ def versus(request, game_type, username, versus):
     'matches': matches,
   })
 
-@login_required
+@login_required(login_url='/login/')
 def submit(request, game_type):
   game = get_object_or_404(Game, slug=game_type)
   ParticipantFormSet = formset_factory(ParticipantForm,
