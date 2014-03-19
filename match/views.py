@@ -4,6 +4,7 @@ from itertools import chain
 import json
 
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
@@ -168,6 +169,7 @@ def versus(request, game_type, username, versus):
     'matches': matches,
   })
 
+@login_required
 def submit(request, game_type):
   game = get_object_or_404(Game, slug=game_type)
   ParticipantFormSet = formset_factory(ParticipantForm,
