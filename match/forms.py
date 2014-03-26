@@ -17,7 +17,7 @@ class RequiredFormSet(BaseFormSet):
       form.empty_permitted = False
 
 class ParticipantForm(forms.Form):
-  queryset = User.objects.order_by('username')
+  queryset = User.objects.filter(is_active=True).order_by('username')
 
   winner = forms.ModelChoiceField(queryset=queryset, widget=Select(attrs={'class': 'form-control'}))
   loser = forms.ModelChoiceField(queryset=queryset, widget=Select(attrs={'class': 'form-control'}))
