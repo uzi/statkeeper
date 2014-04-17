@@ -141,7 +141,7 @@ class Ranking(models.Model):
   def from_rating(self, rating):
     self.mu = rating.mu
     self.sigma = rating.sigma
-    self.exposure = rating.exposure
+    self.exposure = t.expose(rating)
 
   def score(self):
     return int(self.exposure * 1000)
