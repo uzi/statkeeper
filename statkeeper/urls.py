@@ -26,11 +26,11 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('match.views',
     url(r'^$', 'landing', name='landing'),
-    url(r'^(?P<game_type>\w+)/$', 'index', name='index'),
-    url(r'^(?P<game_type>\w+)/submit/$', 'submit', name='submit'),
-    url(r'^(?P<game_type>\w+)/grid/$', 'grid', name='grid'),
-    url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/$', 'user', name='user'),
-    url(r'^(?P<game_type>\w+)/user/(?P<username>\w+)/versus/(?P<versus>\w+)/$', 'versus', name='versus'),
+    url(r'^(?P<game_type>[a-zA-Z0-9_-]+)/$', 'index', name='index'),
+    url(r'^(?P<game_type>[a-zA-Z0-9_-]+)/submit/$', 'submit', name='submit'),
+    url(r'^(?P<game_type>[a-zA-Z0-9_-]+)/grid/$', 'grid', name='grid'),
+    url(r'^(?P<game_type>[a-zA-Z0-9_-]+)/user/(?P<username>[a-zA-Z0-9_-]+)/$', 'user', name='user'),
+    url(r'^(?P<game_type>[a-zA-Z0-9_-]+)/user/(?P<username>[a-zA-Z0-9_-]+)/versus/(?P<versus>[a-zA-Z0-9_-]+)/$', 'versus', name='versus'),
 )
 
 # Uncomment this to serve static files for testing. NO NOT USE IN PRODUCTION.
