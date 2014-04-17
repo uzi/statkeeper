@@ -38,12 +38,12 @@ class MatchManager(models.Manager):
 
   def for_user(self, user, game):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
-    return super(MatchManager, self).get_query_set().filter(id__in=match_ids, game=game)
+    return super(MatchManager, self).get_queryset().filter(id__in=match_ids, game=game)
 
   def between_users(self, user, opponent, game):
     match_ids = list(Participant.objects.filter(user=user).values_list('match_id', flat=True))
     common_ids = list(Participant.objects.filter(user=opponent, match_id__in=match_ids).values_list('match_id', flat=True))
-    return super(MatchManager, self).get_query_set().filter(id__in=common_ids, game=game)
+    return super(MatchManager, self).get_queryset().filter(id__in=common_ids, game=game)
 
 class Match(models.Model):
   results = models.CharField(max_length=255, null=True, blank=True)
